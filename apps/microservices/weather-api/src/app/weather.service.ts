@@ -1,7 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { GetWeatherDto } from './weather.dto';
 import Database from 'better-sqlite3';
-import { Weather, WeatherResult } from '@monorepo/weather-interfaces';
+import {
+  Weather,
+  WeatherResult,
+  validateDateRange,
+} from '@monorepo/weather-interfaces';
 import path from 'path';
 
 @Injectable()
@@ -25,37 +29,41 @@ export class WeatherService {
 
     const startStr = start.toISOString();
     const endStr = end.toISOString();
+    const isValidDateRange = validateDateRange(startStr, endStr);
+    if (isValidDateRange) {
+      throw new Error(isValidDateRange);
+    }
+    // Normalize city name to CamelCase (e.g., "berlin" -> "Berlin", new york -> "New York")
+    const cityCamelCase = city
+      ? city
+          .split(' ')
+          .map(
+            (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+          )
+          .join(' ')
+      : 'Berlin';
 
     // dynamic WHERE clause based on provided parameters
-    let query = `
+    const query = `
     SELECT
       city,
-      DATE(time) AS date,
-      MIN(temperature) AS min_temp,
-      MAX(temperature) AS max_temp
+      STRFTIME('%Y-%m-%d', time) AS date,
+      MAX(CAST(temperature AS REAL)) AS max_temp,
+      MIN(CAST(temperature AS REAL)) AS min_temp
     FROM
       temperature_hourly
     WHERE
       time BETWEEN ? AND ?
-  `;
-    const params = [startStr, endStr];
-
-    if (city) {
-      query += ` AND city = ?`;
-      params.push(city);
-    }
-
-    query += `
+    AND city = ?
     GROUP BY
       city,
-      DATE(time)
+      STRFTIME('%Y-%m-%d', time)
     ORDER BY
       date
   `;
+    const params = [startStr, endStr, cityCamelCase];
 
-    const stmt = this.db.prepare(query);
-    // execute the query with the parameters
-    const data = stmt.all(...params) as Weather[];
+    const data = this.db.prepare(query).all(...params) as Weather[];
 
     return {
       from: startStr,

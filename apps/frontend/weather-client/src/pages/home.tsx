@@ -1,7 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
-import { Box, Grid, Typography, Button, Input, Skeleton } from '@mui/material';
-import { usePaginatedQuotes } from '../hooks/use-paginated-quotes';
-import { QuoteCard } from '../ui/quote-card';
+import { Box, Typography } from '@mui/material';
 import { WeatherChart } from '../ui/weather-chart';
 
 export const Home = () => {
@@ -25,7 +22,7 @@ export const Home = () => {
       </Box>
 
       <Box>
-        <WeatherChart/>
+        <WeatherChart />
       </Box>
     </Box>
   );
