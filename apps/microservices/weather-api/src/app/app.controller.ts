@@ -6,15 +6,15 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { WeatherService } from './weather.service';
-import { WeatherListDto } from './weather.dto';
+import { GetWeatherDto } from './weather.dto';
 
 @Controller('weather')
 export class AppController {
   constructor(private readonly weatherService: WeatherService) {}
 
-  @Get('list')
+  @Get('get-daily-min-max')
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
-  async getQuotes(@Query() dto: WeatherListDto) {
-    return this.weatherService.getWeather();
+  async getDailyMinMax(@Query() query: GetWeatherDto) {
+    return this.weatherService.getDailyMinMax(query);
   }
 }

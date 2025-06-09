@@ -4,13 +4,13 @@
   "files": [],
   "references": [
     {
-      "path": "./apps/microservices/quotes-api"
+      "path": "./apps/microservices/weather-api"
     },
     {
-      "path": "./apps/frontend/quotes-client"
+      "path": "./apps/frontend/weather-client"
     },
     {
-      "path": "./libs/quotes/interfaces"
+      "path": "./libs/weather/interfaces"
     }
   ]
 }

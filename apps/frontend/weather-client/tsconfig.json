@@ -3,7 +3,7 @@
   "include": [],
   "references": [
     {
-      "path": "../../../libs/quotes/interfaces"
+      "path": "../../../libs/weather/interfaces"
     },
     {
       "path": "./tsconfig.app.json"

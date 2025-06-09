@@ -5,7 +5,7 @@ import path from 'path';
 
 export default defineConfig(() => ({
   root: __dirname,
-  cacheDir: '../../../node_modules/.vite/apps/frontend/quotes-client',
+  cacheDir: '../../../node_modules/.vite/apps/frontend/weather-client',
   server: {
     port: 4200,
     host: 'localhost',
@@ -16,7 +16,7 @@ export default defineConfig(() => ({
   },
   plugins: [react()],
   build: {
-    outDir: '../../../dist/apps/frontend/quotes-client',
+    outDir: '../../../dist/apps/frontend/weather-client',
     emptyOutDir: true,
     reportCompressedSize: true,
     commonjsOptions: {
@@ -25,9 +25,9 @@ export default defineConfig(() => ({
   },
   resolve: {
     alias: {
-      '@monorepo/quotes-interfaces': path.resolve(
+      '@monorepo/weather-interfaces': path.resolve(
         __dirname,
-        '../../../libs/quotes/interfaces/src'
+        '../../../libs/weather/interfaces/src'
       ),
     },
   },

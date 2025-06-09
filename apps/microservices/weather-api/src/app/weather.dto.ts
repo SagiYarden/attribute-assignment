@@ -1,4 +1,12 @@
-import { IsInt, Min, Max, IsOptional } from 'class-validator';
-import { Type } from 'class-transformer';
+// src/weather/dto/weather.dto.ts
+import { IsISO8601, IsOptional } from 'class-validator';
 
-export class WeatherListDto {}
+export class GetWeatherDto {
+  @IsOptional()
+  @IsISO8601()
+  from?: string;
+
+  @IsOptional()
+  @IsISO8601()
+  to?: string;
+}
