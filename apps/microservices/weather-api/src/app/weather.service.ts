@@ -2,13 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { GetWeatherDto } from './weather.dto';
 import Database from 'better-sqlite3';
 import { Weather } from '@monorepo/weather-interfaces';
+import path from 'path';
 
 @Injectable()
 export class WeatherService {
   private db: InstanceType<typeof Database>;
 
   constructor() {
-    this.db = new Database('weather.sqlite'); // path is relative to project root or use /data/weather.sqlite if needed
+    const dbPath = path.join(__dirname, 'weather.db');
+    this.db = new Database(dbPath);
   }
 
   getDailyMinMax({ from, to }: GetWeatherDto): {
@@ -29,7 +31,7 @@ export class WeatherService {
     const endStr = end.toISOString();
 
     const stmt = this.db.prepare(`
-      SELECT 
+      SELECT
         DATE(time) AS day,
         MIN(temperature) AS min_temp,
         MAX(temperature) AS max_temp
@@ -40,6 +42,7 @@ export class WeatherService {
     `);
 
     const data = stmt.all(startStr, endStr) as any;
+    console.log('🚀 ~ WeatherService ~ getDailyMinMax ~ data:', data);
 
     return {
       from: startStr,
