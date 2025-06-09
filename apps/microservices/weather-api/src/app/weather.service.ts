@@ -13,7 +13,7 @@ export class WeatherService {
     this.db = new Database(dbPath);
   }
 
-  getDailyMinMax({ from, to }: GetWeatherDto): {
+  getDailyMinMax({ from, to, city }: GetWeatherDto): {
     from: string;
     to: string;
     data: Weather[];
@@ -22,7 +22,7 @@ export class WeatherService {
     const end = to ? new Date(to) : now;
     const start = from
       ? new Date(from)
-      : new Date(end.getTime() - 30 * 24 * 60 * 60 * 1000);
+      : new Date(end.getTime() - 30 * 24 * 60 * 60 * 1000); // Default to last 30 days
 
     start.setHours(0, 0, 0, 0);
     end.setHours(23, 59, 59, 999);
@@ -30,19 +30,34 @@ export class WeatherService {
     const startStr = start.toISOString();
     const endStr = end.toISOString();
 
-    const stmt = this.db.prepare(`
-      SELECT
-        DATE(time) AS day,
-        MIN(temperature) AS min_temp,
-        MAX(temperature) AS max_temp
-      FROM temperature_hourly
-      WHERE time BETWEEN ? AND ?
-      GROUP BY day
-      ORDER BY day ASC
-    `);
+    let query = `
+    SELECT
+      city,
+      DATE(time) AS date,
+      MIN(temperature) AS min_temperature,
+      MAX(temperature) AS max_temperature
+    FROM
+      temperature_hourly
+    WHERE
+      time BETWEEN ? AND ?
+  `;
+    const params = [startStr, endStr];
 
-    const data = stmt.all(startStr, endStr) as any;
-    console.log('🚀 ~ WeatherService ~ getDailyMinMax ~ data:', data);
+    if (city) {
+      query += ` AND city = ?`;
+      params.push(city);
+    }
+
+    query += `
+    GROUP BY
+      city,
+      DATE(time)
+    ORDER BY
+      date
+  `;
+
+    const stmt = this.db.prepare(query);
+    const data = stmt.all(...params) as Weather[];
 
     return {
       from: startStr,
