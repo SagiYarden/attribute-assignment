@@ -30,6 +30,7 @@ export class WeatherService {
     const startStr = start.toISOString();
     const endStr = end.toISOString();
 
+    // dynamic WHERE clause based on provided parameters
     let query = `
     SELECT
       city,
@@ -57,6 +58,7 @@ export class WeatherService {
   `;
 
     const stmt = this.db.prepare(query);
+    // execute the query with the parameters
     const data = stmt.all(...params) as Weather[];
 
     return {
