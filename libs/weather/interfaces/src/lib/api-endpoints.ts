@@ -1,4 +1,4 @@
 export enum ApiEndpoints {
   BASE = 'api/weather',
-  LIST = 'list',
+  LIST = 'get-daily-min-max',
 }

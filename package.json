@@ -3,12 +3,12 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "client": "nx run quotes-client:serve",
-    "server": "nx run quotes-api:serve",
+    "client": "nx run weather-client:serve",
+    "server": "nx run weather-api:serve",
     "format": "nx format:write",
-    "build:client": "nx build quotes-client",
-    "build:server": "nx build quotes-api",
-    "start:server": "node dist/apps/backend/quotes-api/main.js"
+    "build:client": "nx build weather-client",
+    "build:server": "nx build weather-api",
+    "start:server": "node dist/apps/backend/weather-api/main.js"
   },
   "private": true,
   "dependencies": {
@@ -25,6 +25,7 @@
     "@react-router/node": "^7.2.0",
     "@react-router/serve": "^7.2.0",
     "axios": "^1.9.0",
+    "better-sqlite3": "^11.10.0",
     "cache-manager": "^6.4.3",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
@@ -59,6 +60,7 @@
     "@testing-library/dom": "10.4.0",
     "@testing-library/react": "16.1.0",
     "@types/axios": "^0.9.36",
+    "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^20.0.0",
     "@types/react": "19.0.0",
     "@types/react-dom": "19.0.0",
