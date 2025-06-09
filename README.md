@@ -56,7 +56,7 @@ FAVQS_API_KEY=your_api_key_here
 Create a ".env" file at "apps/frontend/quotes-client"
 
 ```
-VITE_QUOTE_APP_BACKEND_URL=http://localhost:3000
+VITE_WEATHER_APP_BACKEND_URL=http://localhost:3000
 ```
 
 ---

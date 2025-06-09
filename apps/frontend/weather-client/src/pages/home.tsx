@@ -2,9 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import { Box, Grid, Typography, Button, Input, Skeleton } from '@mui/material';
 import { usePaginatedQuotes } from '../hooks/use-paginated-quotes';
 import { QuoteCard } from '../ui/quote-card';
+import { WeatherChart } from '../ui/weather-chart';
 
 export const Home = () => {
- 
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ textAlign: 'center', mb: 2 }}>
@@ -24,6 +24,9 @@ export const Home = () => {
         </Typography>
       </Box>
 
+      <Box>
+        <WeatherChart/>
+      </Box>
     </Box>
   );
 };

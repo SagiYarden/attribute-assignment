@@ -5,7 +5,7 @@ import {
   useEffect,
   useState,
 } from 'react';
-const apiUrl = import.meta.env.VITE_QUOTE_APP_BACKEND_URL;
+const apiUrl = import.meta.env.VITE_WEATHER_APP_BACKEND_URL;
 
 type EnvContextType = {
   backendUrl: string;
