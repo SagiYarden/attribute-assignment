@@ -2,7 +2,7 @@
 
 A full-stack application for querying and visualizing historical weather data with date range filtering and city selection.
 
-## 🚀 [Live Demo](https://weather-analysis.onrender.com/)
+## 🚀 [Live Demo](https://attribute-assignment-client.onrender.com/)
 
 - **Backend**: NestJS microservice querying a SQLite database of weather records, with smart filtering
 - **Frontend**: React + Material UI + ChartJS client that displays weather data with customizable date ranges
