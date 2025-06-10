@@ -4,6 +4,7 @@ import { Layout } from '../components/layout';
 import { EnvProvider } from '../providers/env-provider';
 
 export const App = () => {
+  console.log('hello from the app component');
   return (
     <BrowserRouter>
       <EnvProvider>

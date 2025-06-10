@@ -62,7 +62,6 @@ export const WeatherChart = () => {
     fromDate = from,
     toDate = to
   ) => {
-    console.log({fromDate , toDate})
       if(!fromDate || !toDate) {
       setError(null);
       return;
