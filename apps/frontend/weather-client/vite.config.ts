@@ -29,10 +29,6 @@ export default defineConfig(() => ({
         __dirname,
         '../../../libs/weather/interfaces/src'
       ),
-      '@monorepo/shared-utils': path.resolve(
-        __dirname,
-        '../../../libs/shared-utils/src'
-      ),
     },
   },
 }));
