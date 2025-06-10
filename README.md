@@ -103,6 +103,9 @@ http://localhost:3000/api/weather/get-daily-min-max?city=berlin&from=2025-02-04&
 
 ### Notes
 
-If i had more time i would've added more security of the backend (ddos protection, dto validations).
-also would've put it in a real db and not drop the file in the backend ofc then fetching it from a remote db with secured vpn.
-in the client side need to optimize the color mode for the chart and work some more on the date pickers.
+If i had more time i would've:
+
+- add security for the backend (ddos protection, dto validations).
+- add cache control in the backend as well.
+- put the data in a real db and not drop the file in the backend ofc then fetching it from a remote db with secured vpn.
+- client side need to optimize the color mode for the chart and work some more on the date pickers.
