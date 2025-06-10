@@ -48,7 +48,7 @@ export const Header = () => {
             }}
             to={'/'}
           >
-            Quotes Of the Day
+            Yardens Weather App
           </Typography>
         </Box>
         <IconButton

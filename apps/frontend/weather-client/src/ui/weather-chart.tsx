@@ -21,7 +21,6 @@ import {
 } from 'chart.js';
 import { useFetchWeather } from '../hooks/use-fetch-weather';
 import { differenceInDays } from 'date-fns';
-import { validateDateRange } from '@monorepo/weather-interfaces';
 
 
 ChartJS.register(
@@ -57,27 +56,15 @@ export const WeatherChart = () => {
     }
   }, []);
 
-  useEffect(() => {
-    if(!from || !to) {
-      setError(null);
-      return;
-    }
-    const err = validateDateRange(from,to);
-    setError(err);
-  }, [from, to]);
 
   const handleSearch = async (
     searchCity = city,
     fromDate = from,
     toDate = to
   ) => {
-      if(!from || !to) {
+    console.log({fromDate , toDate})
+      if(!fromDate || !toDate) {
       setError(null);
-      return;
-    }
-    const err = validateDateRange(from,to);
-    if (err) {
-      setError(err);
       return;
     }
 

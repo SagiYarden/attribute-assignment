@@ -1,12 +1,29 @@
 import { Injectable } from '@nestjs/common';
 import { GetWeatherDto } from './weather.dto';
 import Database from 'better-sqlite3';
-import {
-  Weather,
-  WeatherResult,
-  validateDateRange,
-} from '@monorepo/weather-interfaces';
+import { Weather, WeatherResult } from '@monorepo/weather-interfaces';
 import path from 'path';
+import { differenceInDays, isAfter, isValid } from 'date-fns';
+
+export function validateDateRange(from: Date | string, to: Date | string) {
+  const fromDate = new Date(from);
+  const toDate = new Date(to);
+
+  if (!isValid(fromDate) || !isValid(toDate)) {
+    return 'Invalid date format.';
+  }
+
+  if (isAfter(fromDate, toDate)) {
+    return 'The "from" date must be before the "to" date.';
+  }
+
+  const diff = differenceInDays(toDate, fromDate);
+  if (diff > 31) {
+    return 'The date range cannot exceed 31 days.';
+  }
+
+  return null;
+}
 
 @Injectable()
 export class WeatherService {
