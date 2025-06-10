@@ -1,8 +1,29 @@
 import { Injectable } from '@nestjs/common';
 import { GetWeatherDto } from './weather.dto';
 import Database from 'better-sqlite3';
-import { Weather } from '@monorepo/weather-interfaces';
+import { Weather, WeatherResult } from '@monorepo/weather-interfaces';
 import path from 'path';
+import { differenceInDays, isAfter, isValid } from 'date-fns';
+
+export function validateDateRange(from: Date | string, to: Date | string) {
+  const fromDate = new Date(from);
+  const toDate = new Date(to);
+
+  if (!isValid(fromDate) || !isValid(toDate)) {
+    return 'Invalid date format.';
+  }
+
+  if (isAfter(fromDate, toDate)) {
+    return 'The "from" date must be before the "to" date.';
+  }
+
+  const diff = differenceInDays(toDate, fromDate);
+  if (diff > 31) {
+    return 'The date range cannot exceed 31 days.';
+  }
+
+  return null;
+}
 
 @Injectable()
 export class WeatherService {
@@ -13,11 +34,7 @@ export class WeatherService {
     this.db = new Database(dbPath);
   }
 
-  getDailyMinMax({ from, to, city }: GetWeatherDto): {
-    from: string;
-    to: string;
-    data: Weather[];
-  } {
+  getDailyMinMax({ from, to, city }: GetWeatherDto): WeatherResult {
     const now = new Date();
     const end = to ? new Date(to) : now;
     const start = from
@@ -29,37 +46,41 @@ export class WeatherService {
 
     const startStr = start.toISOString();
     const endStr = end.toISOString();
+    const isValidDateRange = validateDateRange(startStr, endStr);
+    if (isValidDateRange) {
+      throw new Error(isValidDateRange);
+    }
+    // Normalize city name to CamelCase (e.g., "berlin" -> "Berlin", new york -> "New York")
+    const cityCamelCase = city
+      ? city
+          .split(' ')
+          .map(
+            (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+          )
+          .join(' ')
+      : 'Berlin';
 
     // dynamic WHERE clause based on provided parameters
-    let query = `
+    const query = `
     SELECT
       city,
-      DATE(time) AS date,
-      MIN(temperature) AS min_temperature,
-      MAX(temperature) AS max_temperature
+      STRFTIME('%Y-%m-%d', time) AS date,
+      MAX(CAST(temperature AS REAL)) AS max_temp,
+      MIN(CAST(temperature AS REAL)) AS min_temp
     FROM
       temperature_hourly
     WHERE
       time BETWEEN ? AND ?
-  `;
-    const params = [startStr, endStr];
-
-    if (city) {
-      query += ` AND city = ?`;
-      params.push(city);
-    }
-
-    query += `
+    AND city = ?
     GROUP BY
       city,
-      DATE(time)
+      STRFTIME('%Y-%m-%d', time)
     ORDER BY
       date
   `;
+    const params = [startStr, endStr, cityCamelCase];
 
-    const stmt = this.db.prepare(query);
-    // execute the query with the parameters
-    const data = stmt.all(...params) as Weather[];
+    const data = this.db.prepare(query).all(...params) as Weather[];
 
     return {
       from: startStr,

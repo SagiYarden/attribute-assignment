@@ -1,22 +1,22 @@
-# Titan-Quotes
+# Weather-Analysis
 
-A full-stack application for browsing and discovering quotes with infinite scrolling and tag filtering capabilities.
+A full-stack application for querying and visualizing historical weather data with date range filtering and city selection.
 
-## 🚀 [Live Demo](https://quotes-of-the-day.onrender.com/)
+## 🚀 [Live Demo](https://weather-analysis.onrender.com/)
 
-- **Backend**: NestJS microservice fetching quotes from FavQs API, with Redis caching, smart pagination & retry logic
-- **Frontend**: React + Material UI client that displays quotes in a responsive grid with infinite scrolling
-- **Shared**: TypeScript interfaces for common Quote types in a monorepo structure
+- **Backend**: NestJS microservice querying a SQLite database of weather records, with smart filtering
+- **Frontend**: React + Material UI + ChartJS client that displays weather data with customizable date ranges
+- **Shared**: TypeScript interfaces for common Weather types in a monorepo structure
 
 ---
 
 ## Features
 
-- 🔄 **Infinite scroll** - Load more quotes as you scroll down
-- 🏷️ **Tag filtering** - Filter quotes by specific tags
+- 📅 **Date range selection** - Query weather data between specific dates (max to 31 days)
+- 🌆 **City filtering** - Filter weather data by specific cities
 - 📱 **Responsive design** - Works on mobile, tablet, and desktop
 - ⚡ **Performance optimized** - Backend caching and frontend optimizations
-- 🔁 **Retry logic** - Handles API rate limiting gracefully
+- 📊 **Data visualization** - Clear presentation of weather patterns
 - 🎨 **Material UI** - Modern, clean user interface
 
 ---
@@ -25,7 +25,6 @@ A full-stack application for browsing and discovering quotes with infinite scrol
 
 - Node.js ≥14
 - npm (or npx)
-- A free API key from FavQs
 
 ---
 
@@ -41,22 +40,12 @@ npm install
 
 ### 2. Configure environment variables
 
-2.1 Backend:
+2.1 Frontend:
 
-Create a ".env" file at the root "apps/microservices/quotes-api"
-
-```
-FAVQS_API_URL=https://favqs.com/api
-# Your FavQs API key (sign up for free)
-FAVQS_API_KEY=your_api_key_here
-```
-
-2.2 Frontend:
-
-Create a ".env" file at "apps/frontend/quotes-client"
+Create a ".env" file at "apps/frontend/weather-client"
 
 ```
-VITE_QUOTE_APP_BACKEND_URL=http://localhost:3000
+VITE_WEATHER_APP_BACKEND_URL=http://localhost:3000
 ```
 
 ---
@@ -83,34 +72,31 @@ Open your browser at the address shown (default is http://localhost:4200/ )
 
 #### API Endpoints
 
-#### Get Quotes:
+#### Get Weather Data:
 
 ```
-GET /quotes/list
-  ?count=<total-quotes-to-return>
-  &page=<page-number>
-  &pageSize=<quotes-per-page>
-  &tag=<single-tag>
+GET /weather/get-daily-min-max
+  ?city=<city-name>
+  &from=<YYYY-MM-DD>
+  &to=<YYYY-MM-DD>
 ```
 
 Example:
 
 ```
-http://localhost:3000/api/quotes/list?count=50&page=1&pageSize=10&tag=cool
+http://localhost:3000/api/weather/get-daily-min-max?city=berlin&from=2025-02-04&to=2025-03-04
 ```
 
-- count: total quotes you want overall
-- page: which page of pageSize to return
-- pageSize: how many quotes per “page” (max 50, validated by DTO)
-- tag: Filter by specific tag (optional)
-
-On the frontend, enter your desired count in the input box— infinite-scroll or paging can be built on top of this.
+- city: The city to query weather data for
+- from: Beginning of date range (format: YYYY-MM-DD)
+- to: End of date range (format: YYYY-MM-DD)
 
 ### Frontend Usage
 
-1. Browse Random Quotes: Just open the app to see random quotes
-2. Filter by Tag: Enter a tag name in the filter input and click "Get Quotes"
-3. Adjust Quote Count: Change the number in the count input
-4. Infinite Scroll: Just keep scrolling down to load more quotes
+1. Enter a city name in the city input field
+2. Select a start date using the first date picker
+3. Select an end date using the second date picker (max 31 days from start date)
+4. Click the "Search" button to query weather data
+5. View the results displayed on the page
 
 ---

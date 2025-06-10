@@ -1,5 +1,11 @@
 export type Weather = {
-  day: string;
+  date: string;
   min_temp: number;
   max_temp: number;
+};
+
+export type WeatherResult = {
+  from: string;
+  to: string;
+  data: Weather[];
 };

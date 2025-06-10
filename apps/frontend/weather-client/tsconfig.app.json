@@ -33,5 +33,9 @@
     "../../../libs/*",
     "../../../libs/**/*.tsx"
   ],
-  "references": []
+  "references": [
+    {
+      "path": "../../../libs/weather/interfaces/tsconfig.lib.json"
+    }
+  ]
 }
