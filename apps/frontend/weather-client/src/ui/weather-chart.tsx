@@ -5,7 +5,7 @@ import {
   Button,
   Typography,
   Paper,
-  FormHelperText
+  FormHelperText,
 } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -21,7 +21,6 @@ import {
 } from 'chart.js';
 import { useFetchWeather } from '../hooks/use-fetch-weather';
 import { differenceInDays } from 'date-fns';
-
 
 ChartJS.register(
   CategoryScale,
@@ -43,8 +42,6 @@ export const WeatherChart = () => {
 
   const { fetchWeather } = useFetchWeather();
 
-
-
   useEffect(() => {
     const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (saved) {
@@ -56,13 +53,12 @@ export const WeatherChart = () => {
     }
   }, []);
 
-
   const handleSearch = async (
     searchCity = city,
     fromDate = from,
     toDate = to
   ) => {
-      if(!fromDate || !toDate) {
+    if (!fromDate || !toDate) {
       setError(null);
       return;
     }
